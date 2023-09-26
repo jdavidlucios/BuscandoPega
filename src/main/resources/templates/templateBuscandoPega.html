@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Productos</title>
+    <!-- Agregar enlaces a Bootstrap CSS y JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Lista de Productos</h1>
+
+    <!-- Filtro de Productos por Nombre -->
+    <form th:action="@{/productos/buscar}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="nombre" placeholder="Buscar por nombre">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Filtro por Categoría -->
+    <form th:action="@{/productos/filtrar}" method="get" class="mb-3">
+        <div class="input-group">
+            <select class="form-control" name="categoriaId">
+                <option value="">Todas las Categorías</option>
+                <!-- Aquí puedes iterar sobre las categorías disponibles y crear opciones -->
+                <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
+                        th:text="${categoria.nombre}"></option>
+            </select>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-success">Filtrar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Lista de Productos con Bootstrap -->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Cantidad en Stock</th>
+            <th>Categoría</th>
+            <th>Marca</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Aquí puedes iterar sobre los productos y mostrarlos en la tabla -->
+        <tr th:each="producto : ${atributoListarProductos}">
+            <td th:text="${producto.productoId}"></td>
+            <td th:text="${producto.nombreProducto}"></td>
+            <td th:text="${producto.precioProducto}"></td>
+            <td th:text="${producto.stockProducto}"></td>
+            <td th:text="${producto.categoriaProducto.nombreCategoria}"></td>
+            <td th:text="${producto.marcaProducto.nombreMarca}"></td>
+
+            <td>
+                <!-- Botón para comprar -->
+                <!--<a th:href="@{'/comprar/' + ${producto.id}}" class="btn btn-primary">Comprar</a>-->
+                <button type="button" class="btn btn-warning" data-toggle="modal"> <!--th:data-target="'#comprarProductoModal' + ${producto.id}"-->
+                    <i class="fas fa-shopping-cart"></i>
+                    &nbsp;Comprar
+                </button>
+            </td>
+            <td>
+                <!-- Boton descripción -->
+                <!--<a th:href="@{'/especificaciones/' + ${producto.id}}" class="btn btn-info">Especificaciones</a>-->
+                <button type="button" class="btn btn-danger" data-toggle="modal"> <!--th:data-target="'#descripcionProductoModal-' + ${producto.id}-->
+                    <i class="fas fa-info-circle"></i>
+                    &nbsp;Especificaciones
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
